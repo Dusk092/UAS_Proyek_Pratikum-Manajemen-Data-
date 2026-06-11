@@ -1,0 +1,178 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Wallet</title>
+
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='style.css') }}"
+    />
+  </head>
+  <body>
+    <div id="notifBox"></div>
+
+    <div class="container">
+      <!-- Sidebar -->
+      <aside class="sidebar">
+        <div class="logo">💰 Finance BI</div>
+
+        <ul class="menu">
+          <li><a href="/">📊 Dashboard</a></li>
+          <li><a href="/analisis">📈 Analytics</a></li>
+          <li class="active"><a href="/wallet">💳 Wallet</a></li>
+          <li><a href="/laporan">📋 Laporan</a></li>
+          <li><a href="/pengaturan">⚙️ Settings</a></li>
+        </ul>
+      </aside>
+
+      <!-- Main Content -->
+      <main class="main">
+        <!-- Main Content -->
+
+        <main class="main">
+          <div class="top-header">
+            <div>
+              <h1>💳 Wallet</h1>
+              <p>Kelola saldo dan transaksi keuangan</p>
+            </div>
+          </div>
+
+          <!-- My Card -->
+          <div class="wallet-card">
+            <div class="card-header">
+              <h3>My Card</h3>
+              <span>VISA</span>
+            </div>
+
+            <h1>Rp {{ saldo }}</h1>
+
+            <p>Current Balance</p>
+
+            <br />
+
+            <h3>**** **** **** 1299</h3>
+
+            <div class="card-footer">
+              <span>Pramudya D. Sambudi</span>
+              <span>09/29</span>
+            </div>
+          </div>
+
+          <!-- Form Input -->
+          <div class="panel mt">
+            <h2>➕ Tambah Transaksi</h2>
+
+            <form action="/tambah" method="POST">
+              <div class="form-group">
+                <label>Kategori</label>
+
+                <input
+                  type="text"
+                  name="kategori"
+                  placeholder="Contoh: Makan"
+                  required
+                />
+              </div>
+
+              <div class="form-group">
+                <label>Nominal</label>
+
+                <input
+                  type="number"
+                  name="jumlah"
+                  placeholder="100000"
+                  required
+                />
+              </div>
+
+              <div class="form-group">
+                <label>Jenis Transaksi</label>
+
+                <select name="jenis">
+                  <option value="pemasukan">Pemasukan</option>
+
+                  <option value="pengeluaran">Pengeluaran</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label>Tanggal</label>
+
+                <input type="date" name="tanggal" required />
+              </div>
+
+              <button class="save-btn">💾 Simpan Transaksi</button>
+            </form>
+          </div>
+
+          <!-- Statistik -->
+          <div class="cards">
+            <div class="card">
+              <h3>Total Pemasukan</h3>
+              <h2>Rp {{ pemasukan|rupiah }}</h2>
+            </div>
+
+            <div class="card">
+              <h3>Total Pengeluaran</h3>
+              <h2>Rp {{ pengeluaran|rupiah }}</h2>
+            </div>
+
+            <div class="card">
+              <h3>Sisa Saldo</h3>
+              <h2>Rp {{ saldo|rupiah }}</h2>
+            </div>
+          </div>
+
+          <!-- Riwayat Transaksi -->
+          <div class="panel mt">
+            <h2>📋 Riwayat Transaksi</h2>
+
+            <table>
+              <thead>
+                <tr>
+                  <th>Kategori</th>
+                  <th>Jenis</th>
+                  <th>Nominal</th>
+                  <th>Aksi</th>
+                </tr>
+              </thead>
+
+              <tbody>
+                {% for item in transaksi %}
+
+                <tr>
+                  <td>{{ item.kategori }}</td>
+
+                  <td>{{ item.jenis }}</td>
+
+                  <td>Rp {{ item.jumlah|rupiah }}</td>
+
+                  <td>
+                    <a href="/hapus/{{ loop.index0 }}" class="btn-delete">
+                      🗑 Hapus
+                    </a>
+                  </td>
+                </tr>
+
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </main>
+      </main>
+    </div>
+
+    <script>
+      const savedTheme = localStorage.getItem("theme");
+
+      if (savedTheme) {
+        document.body.classList.remove("light", "dark");
+
+        document.body.classList.add(savedTheme);
+      }
+    </script>
+    <script src="{{ url_for('static', filename='theme.js') }}"></script>
+  </body>
+</html>

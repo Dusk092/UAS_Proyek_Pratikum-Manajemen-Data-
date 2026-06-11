@@ -1,0 +1,181 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Finance BI Dashboard</title>
+
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='style.css') }}"
+    />
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  </head>
+
+  <body>
+    <div id="notifBox"></div>
+
+    <div class="container">
+      <aside class="sidebar">
+        <div class="logo">💰 Finance BI</div>
+
+        <ul class="menu">
+          <li class="active">
+            <a href="/">📊 Dashboard</a>
+          </li>
+
+          <li>
+            <a href="/analisis">📈 Analytics</a>
+          </li>
+
+          <li>
+            <a href="/wallet">💳 Wallet</a>
+          </li>
+
+          <li>
+            <a href="/laporan">👤 Laporan</a>
+          </li>
+
+          <li>
+            <a href="/pengaturan">⚙️ Settings</a>
+          </li>
+        </ul>
+
+        <div class="sidebar-footer">
+
+          <div class="profile">
+            <img src="https://i.pravatar.cc/80" />
+
+            <div>
+              <strong>Pramudya</strong>
+              <p>Finance Analyst</p>
+            </div>
+          </div>
+        </div>
+      </aside>
+
+      <main class="main">
+        <div class="top-header">
+          <div>
+            <h1>Welcome Back 👋</h1>
+            <p>Stay Updated With What's Happening</p>
+          </div>
+
+          <input type="text" placeholder="Search..." class="search-box" />
+        </div>
+
+        <div class="cards">
+          <div class="card">
+            <h3>Total Pengeluaran</h3>
+            <h2>Rp {{ pengeluaran|rupiah }}</h2>
+          </div>
+
+          <div class="card">
+            <h3>Total Pemasukan</h3>
+            <h2>Rp {{ pemasukan|rupiah }}</h2>
+          </div>
+
+          <div class="card">
+            <h3>Sisa Saldo</h3>
+            <h2>Rp {{ saldo|rupiah }}</h2>
+          </div>
+
+          <div class="card">
+            <h3>Jumlah Kategori</h3>
+            <h2>{{ jumlah_kategori }}</h2>
+          </div>
+        </div>
+
+        <div class="dashboard-grid">
+          <div>
+            <div class="panel">
+              <h3>Overview</h3>
+
+              <canvas id="barChart"></canvas>
+            </div>
+
+            <div class="panel mt">
+              <h3>Transaction</h3>
+
+              <table>
+                <thead>
+                  <tr>
+                    <th>Kategori</th>
+                    <th>Nominal</th>
+                    <th>Status</th>
+                  </tr>
+                </thead>
+
+                <tbody>
+                  {% for item in transaksi %}
+
+                  <tr>
+                    <td>{{ item.kategori }}</td>
+
+                    <td>Rp {{ item.jumlah|rupiah }}</td>
+
+                    <td>{{ item.jenis }}</td>
+                  </tr>
+
+                  {% endfor %}
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <div>
+            <div class="my-card">
+              <h3>My Card</h3>
+
+              <div class="visa">
+                <h2>Rp {{ saldo|rupiah }}</h2>
+
+                <p>Current Balance</p>
+
+                <br />
+
+                <p>**** **** **** 1299</p>
+              </div>
+            </div>
+
+            <div class="panel">
+              <h3>Activity</h3>
+
+              <canvas id="pieChart"></canvas>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+
+    <script id="bulanLabels" type="application/json">
+      {{ grafik_label|tojson }}
+    </script>
+
+    <script id="bulanData" type="application/json">
+      {{ grafik_data|tojson }}
+    </script>
+
+    <script id="kategoriLabels" type="application/json">
+      {{ grafik_label|tojson }}
+    </script>
+
+    <script id="kategoriData" type="application/json">
+      {{ grafik_data|tojson }}
+    </script>
+
+    <script src="{{ url_for('static', filename='dashboard.js') }}"></script>
+
+    <script>
+      const savedTheme = localStorage.getItem("theme");
+
+      if (savedTheme) {
+        document.body.classList.remove("light", "dark");
+
+        document.body.classList.add(savedTheme);
+      }
+    </script>
+    <script src="{{ url_for('static', filename='theme.js') }}"></script>
+  </body>
+</html>

@@ -1,0 +1,172 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Pengaturan</title>
+
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='style.css') }}"
+    />
+  </head>
+
+  <body class="light">
+    <div id="notifBox"></div>
+
+    <div class="container">
+      <aside class="sidebar">
+        <div class="logo">💰 Finance BI</div>
+
+        <ul class="menu">
+          <li><a href="/">📊 Dashboard</a></li>
+          <li><a href="/analisis">📈 Analytics</a></li>
+          <li><a href="/wallet">💳 Wallet</a></li>
+          <li><a href="/laporan">📋 Laporan</a></li>
+          <li class="active"><a href="/pengaturan">⚙️ Settings</a></li>
+        </ul>
+      </aside>
+
+      <main class="main">
+        <div class="top-header">
+          <div>
+            <h1>⚙️ Pengaturan</h1>
+            <p>Kelola preferensi aplikasi Finance BI</p>
+          </div>
+        </div>
+
+        <!-- Profil -->
+        <div class="panel">
+          <h2>👤 Profil Pengguna</h2>
+
+          <div class="form-group">
+            <label>Nama Lengkap</label>
+            <input type="text" value="Pramudya Daniel Sambudi" />
+          </div>
+
+          <div class="form-group">
+            <label>Email</label>
+            <input type="email" value="pramudya@email.com" />
+          </div>
+        </div>
+
+        <!-- Preferensi -->
+        <div class="panel mt">
+          <h2>💰 Preferensi Keuangan</h2>
+
+          <div class="form-group">
+            <label>Mata Uang</label>
+
+            <select>
+              <option>Rupiah (IDR)</option>
+              <option>Dollar (USD)</option>
+              <option>Euro (EUR)</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label>Batas Pengeluaran Bulanan</label>
+
+            <input type="number" value="5000000" />
+          </div>
+        </div>
+
+        <!-- Tampilan -->
+        <div class="panel mt">
+          <h2>🎨 Tampilan</h2>
+
+          <div class="form-group">
+            <label>Tema</label>
+
+            <select id="themeSelect" onchange="ubahTema()">
+              <option value="light">☀️ Light Mode</option>
+              <option value="dark">🌙 Dark Mode</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Notifikasi -->
+        <div class="panel mt">
+          <h2>🔔 Notifikasi</h2>
+
+          <div class="setting-row">
+            <span>Pengingat Pembayaran</span>
+            <input type="checkbox" checked />
+          </div>
+
+          <div class="setting-row">
+            <span>Notifikasi Pengeluaran Besar</span>
+            <input type="checkbox" checked />
+          </div>
+
+          <div class="setting-row">
+            <span>Laporan Bulanan</span>
+            <input type="checkbox" />
+          </div>
+        </div>
+
+        <!-- Tombol Simpan -->
+
+        <div class="panel mt">
+            <button onclick="saveSettings()">
+            💾 Simpan Pengaturan
+            </button>
+        </div>
+
+        <script>
+
+            function ubahTema() {
+
+                const tema =
+                document.getElementById(
+                    "themeSelect"
+                ).value;
+
+                document.body.className =
+                tema;
+
+                localStorage.setItem(
+                    "theme",
+                    tema
+                );
+            }
+
+            function saveSettings(){
+
+    const tema =
+    document.getElementById(
+        "themeSelect"
+    ).value;
+
+    localStorage.setItem(
+        "theme",
+        tema
+    );
+
+    alert(
+        "Pengaturan berhasil disimpan!"
+    );
+}
+
+                window.onload = function(){
+
+                    const tema =
+                    localStorage.getItem(
+                        "theme"
+                    ) || "light";
+
+                    document.body.className =
+                    tema;
+
+                    document.getElementById(
+                    "themeSelect"
+                    ).value =
+                    tema;
+                };
+
+        </script>
+
+</body>
+</html>
+</body>
+</html>

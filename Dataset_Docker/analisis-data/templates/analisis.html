@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Analisis Pengeluaran</title>
+
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='style.css') }}"
+    />
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  </head>
+  <body>
+    <div id="notifBox"></div>
+
+    <div class="container">
+      <aside class="sidebar">
+        <div class="logo">💰 Finance BI</div>
+
+        <ul class="menu">
+          <li><a href="/">📊 Dashboard</a></li>
+
+          <li class="active">
+            <a href="/analisis">📈 Analytics</a>
+          </li>
+
+          <li><a href="/wallet">💳 Wallet</a></li>
+
+          <li><a href="/laporan">📋 Laporan</a></li>
+
+          <li><a href="/pengaturan">⚙️ Settings</a></li>
+        </ul>
+      </aside>
+
+      <main class="main">
+        <div class="header-page">
+          <h1>📈 Analisis Pengeluaran</h1>
+
+          <p>Analisis kategori pengeluaran bulanan</p>
+        </div>
+
+        <div class="cards-analisis">
+          <div class="card-info">
+            <h3>Kategori Terbesar</h3>
+
+            <h2>{{ terbesar }}</h2>
+            <p>Rp {{ nilai_terbesar }}</p>
+          </div>
+
+          <div class="card-info">
+            <h3>Kategori Terkecil</h3>
+
+            <h2>{{ terkecil }}</h2>
+            <p>Rp {{ nilai_terkecil }}</p>
+          </div>
+        </div>
+
+        <div class="chart-container">
+          <canvas id="analisisChart"></canvas>
+        </div>
+      </main>
+    </div>
+
+    <script>
+
+      const labels = [
+      {% for nama in kategori.keys() %}
+      "{{ nama }}",
+      {% endfor %}
+      ];
+
+      const dataNominal = [
+      {% for nilai in kategori.values() %}
+      {{ nilai }},
+      {% endfor %}
+      ];
+
+      new Chart(
+          document.getElementById("analisisChart"),
+          {
+              type: "doughnut",
+
+              data: {
+                  labels: labels,
+
+                  datasets: [{
+                      data: dataNominal,
+
+                      backgroundColor: [
+                          "#3b82f6",
+                          "#ef4444",
+                          "#f59e0b",
+                          "#10b981",
+                          "#8b5cf6",
+                          "#ec4899",
+                          "#06b6d4",
+                          "#84cc16",
+                          "#f97316",
+                          "#14b8a6"
+                      ]
+                  }]
+              },
+
+              options: {
+                  responsive: true,
+                  maintainAspectRatio: false
+              }
+          }
+      );
+    </script>
+
+    <script>
+      const savedTheme = localStorage.getItem("theme");
+
+      if (savedTheme) {
+        document.body.classList.remove("light", "dark");
+
+        document.body.classList.add(savedTheme);
+      }
+    </script>
+    <script src="{{ url_for('static', filename='theme.js') }}"></script>
+  </body>
+</html>

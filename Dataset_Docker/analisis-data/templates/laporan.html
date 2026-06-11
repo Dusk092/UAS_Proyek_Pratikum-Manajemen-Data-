@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Laporan Keuangan</title>
+
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='style.css') }}"
+    />
+  </head>
+
+  <body>
+    <div id="notifBox"></div>
+
+    <div class="container">
+      <aside class="sidebar">
+        <div class="logo">💰 Finance BI</div>
+
+        <ul class="menu">
+          <li><a href="/">📊 Dashboard</a></li>
+          <li><a href="/analisis">📈 Analytics</a></li>
+          <li><a href="/wallet">💳 Wallet</a></li>
+          <li class="active"><a href="/laporan">📋 Laporan</a></li>
+          <li><a href="/pengaturan">⚙️ Settings</a></li>
+        </ul>
+      </aside>
+
+      <main class="main">
+        <div class="top-header">
+          <div>
+            <h1>📋 Laporan Keuangan</h1>
+            <p>Ringkasan pemasukan dan pengeluaran bulanan</p>
+          </div>
+        </div>
+
+        <!-- Ringkasan -->
+        <div class="cards">
+          <div class="card">
+            <h3>Total Pemasukan</h3>
+            <h2>Rp {{ pemasukan|rupiah }}</h2>
+          </div>
+
+          <div class="card">
+            <h3>Total Pengeluaran</h3>
+            <h2>Rp {{ pengeluaran|rupiah }}</h2>
+          </div>
+
+          <div class="card">
+            <h3>Sisa Saldo</h3>
+            <h2>Rp {{ saldo|rupiah }}</h2>
+          </div>
+
+          <div class="card">
+            <h3>Persentase Tabungan</h3>
+            <h2>{{ persentase }}%</h2>
+          </div>
+        </div>
+
+        <!-- Tabel Laporan -->
+        <div class="panel mt">
+          <div class="table-header">
+            <h2>Laporan Bulanan</h2>
+
+            <a href="/export_pdf" class="export-btn"> 📄 Export PDF </a>
+          </div>
+
+          <table>
+            <thead>
+              <tr>
+                <th>Bulan</th>
+                <th>Pemasukan</th>
+                <th>Pengeluaran</th>
+                <th>Saldo Akhir</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+
+            <tbody>
+              {% for item in laporan_data %}
+
+              <tr>
+                <td>{{ item.kategori }}</td>
+
+                <td>
+                  {% if item.pemasukan > 0 %} Rp {{ item.pemasukan|rupiah }} {%
+                  else %} - {% endif %}
+                </td>
+
+                <td>
+                  {% if item.pengeluaran > 0 %} Rp {{ item.pengeluaran|rupiah }}
+                  {% else %} - {% endif %}
+                </td>
+
+                <td>Rp {{ item.saldo|rupiah }}</td>
+
+                <td>
+                  <span class="status-success"> {{ item.status }} </span>
+                </td>
+              </tr>
+
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Kesimpulan -->
+        <div class="panel mt">
+          <h2>Kesimpulan</h2>
+          <p>{{ kesimpulan }}</p>
+        </div>
+      </main>
+    </div>
+
+    <script>
+      const savedTheme = localStorage.getItem("theme");
+
+      if (savedTheme) {
+        document.body.classList.remove("light", "dark");
+
+        document.body.classList.add(savedTheme);
+      }
+    </script>
+    <script src="{{ url_for('static', filename='theme.js') }}"></script>
+  </body>
+</html>
